@@ -24,9 +24,11 @@ user_router.post('/users', async (req, res) => {
         })
     } catch (e) {
         if(e.code === 11000 ){
+            console.log(e)
             return res.status(400).send('User already exists.')
         }
         if(e.name === "ValidationError" ){
+            console.log(e)
             return res.status(400).send('Password needs to be at least 7 characters.')
         }
         res.status(400).send(e)
@@ -96,7 +98,13 @@ user_router.patch('/users/me', auth, async (req, res) => {
         res.status(400).send()
     }
 })
-
+user_router.get('/users/me/short', auth, async (req, res) => {
+    try {
+        res.send(req.user.short)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
 user_router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove()
