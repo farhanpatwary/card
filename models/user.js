@@ -3,6 +3,7 @@ const val = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const secret = require('../config/secret').secret
+const shortid = require('shortid');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -14,21 +15,25 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
-    age: {
-        type: Number,
-        default: 0,
-        validate(value) {
-            if (value < 0) {
-                throw new Error('Age cannot be less than 0.')
-            }
-        }
-    },
-    email: {
+    personal_email: {
         type: String,
         required: true,
-        trim: true,
+        trim: true, 
         index: {
             unique: true, 
+            dropDups: true
+        },
+        validate(value) {
+            if (!val.isEmail(value)) {
+                throw new Error('Email is invalid.')
+            }
+        }
+
+    },
+    work_email: {
+        type: String,
+        trim: true,
+        index: {
             dropDups: true
         },
         validate(value) {
@@ -44,15 +49,15 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minlength: 7
     },
-    avatar: {
-        type: Buffer
-    },
     tokens: [{
         token: {
             type: String,
             required: true
         }
     }],
+    short: {
+        type: String
+    }
 }, {
     timestamps: true,
 })
@@ -119,6 +124,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
 // Hashes password before saving to db
 userSchema.pre('save', async function (next) {
     const user = this
+    if(user.short === undefined){
+        user.short = shortid.generate()
+    }
     if (user.isModified('password')) {
         const salt = await bcrypt.genSaltSync(10)
         user.password = await bcrypt.hash(user.password, salt)
