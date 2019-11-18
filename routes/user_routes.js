@@ -44,6 +44,21 @@ user_router.get('/users/:id', async (req, res) => {
     }
 })
 
+user_router.post('/addcontact', auth, async (req, res) => {
+    const user = req.user
+    try {
+        await user.addContact(req.body.id)
+        res.status(200).send()
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+user_router.get('/contacts', auth, async (req,res) => {
+    const contact_ids = req.user.contacts 
+    const contacts = await User.find({_id:{$in : contact_ids}})
+})
+
 // Login
 // Successful Login will return the corresponding user data and the token
 user_router.post('/users/login', async (req, res) => {

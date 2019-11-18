@@ -57,7 +57,8 @@ const userSchema = new mongoose.Schema({
     }],
     short: {
         type: String
-    }
+    },
+    contacts:[{type:mongoose.Schema.Types.ObjectId}]
 }, {
     timestamps: true,
 })
@@ -101,6 +102,14 @@ userSchema.methods.clearOldTokens = async function(){
         }
     })
     user.tokens = tokens_new
+    await user.save()
+}
+
+// Add Contact to contacts list
+userSchema.methods.addContact = async function(id){
+    const user = this
+    new_contacts = user.contacts.concat(id)
+    user.contacts = new_contacts
     await user.save()
 }
 
