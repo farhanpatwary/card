@@ -23,40 +23,50 @@ user_router.post('/users', async (req, res) => {
             token
         })
     } catch (e) {
-        if(e.code === 11000 ){
-            console.log(e)
+        if (e.code === 11000) {
             return res.status(400).send('User already exists.')
         }
-        if(e.name === "ValidationError" ){
-            console.log(e)
+        if (e.name === "ValidationError") {
             return res.status(400).send('Password needs to be at least 7 characters.')
         }
         res.status(400).send(e)
     }
 })
 
-user_router.get('/users/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id)
-        res.send({user})
-    } catch (e) {
-        res.status(404).send()
-    }
-})
-
 user_router.post('/addcontact', auth, async (req, res) => {
     const user = req.user
     try {
-        await user.addContact(req.body.id)
+        const contact = await User.find({
+            short: req.body.short
+        })
+        await user.addContact(contact[0]._id)
         res.status(200).send()
     } catch (e) {
         res.status(500).send()
     }
 })
 
-user_router.get('/contacts', auth, async (req,res) => {
-    const contact_ids = req.user.contacts 
-    const contacts = await User.find({_id:{$in : contact_ids}})
+user_router.post('/removecontact', auth, async (req, res) => {
+    const user = req.user
+    //console.log(user)
+    try {
+        //console.log(req.body.contact_id)
+        await user.removeContact(req.body.contact_id)
+        res.status(200).send()
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+
+user_router.get('/contacts', auth, async (req, res) => {
+    const contact_ids = req.user.contacts
+    const contacts = await User.find({
+        _id: {
+            $in: contact_ids
+        }
+    })
+    res.send(contacts)
 })
 
 // Login
