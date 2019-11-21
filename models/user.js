@@ -43,6 +43,9 @@ const userSchema = new mongoose.Schema({
         }
 
     },
+    phone_number:{
+        type: String
+    },
     password: {
         type: String,
         required: true,
@@ -123,9 +126,9 @@ userSchema.methods.removeContact = async function(contact_id){
 // Used for Sign In and Sign Up
 // Finds user if user exists
 // If user exists, bcrypt checks if provided user details are correct 
-userSchema.statics.findByCredentials = async (email, password) => {
+userSchema.statics.findByCredentials = async (personal_email, password) => {
     const user = await User.findOne({
-        email
+        personal_email
     })
     if (!user) {
         throw 'User Does not exist.'
