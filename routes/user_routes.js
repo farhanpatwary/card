@@ -73,7 +73,7 @@ user_router.get('/contacts', auth, async (req, res) => {
 // Successful Login will return the corresponding user data and the token
 user_router.post('/users/login', async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const user = await User.findByCredentials(req.body.personal_email, req.body.password)
         const token = await user.generateAuthToken()
         await user.clearOldTokens()
         res.send({
@@ -81,6 +81,7 @@ user_router.post('/users/login', async (req, res) => {
             token
         })
     } catch (e) {
+        console.log(req.body)
         res.status(400).send(e)
     }
 })
