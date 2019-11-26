@@ -33,31 +33,28 @@ user_router.post('/users', async (req, res) => {
     }
 })
 
-user_router.post('/addcontact', auth, async (req, res) => {
+user_router.post('/addcontact', auth, async (req, res) => {    
     const user = req.user
     try {
         const contact = await User.find({
             short: req.body.short
         })
         await user.addContact(contact[0]._id)
-        res.status(200).send()
+        res.status(200).send(contact)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
 user_router.post('/removecontact', auth, async (req, res) => {
     const user = req.user
-    //console.log(user)
     try {
-        //console.log(req.body.contact_id)
         await user.removeContact(req.body.contact_id)
         res.status(200).send()
     } catch (e) {
         res.status(500).send()
     }
 })
-
 
 user_router.get('/contacts', auth, async (req, res) => {
     const contact_ids = req.user.contacts
@@ -124,6 +121,7 @@ user_router.patch('/users/me', auth, async (req, res) => {
         res.status(400).send()
     }
 })
+
 user_router.get('/users/me/short', auth, async (req, res) => {
     try {
         res.send(req.user.short)
@@ -131,6 +129,7 @@ user_router.get('/users/me/short', auth, async (req, res) => {
         res.status(500).send()
     }
 })
+
 user_router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove()
