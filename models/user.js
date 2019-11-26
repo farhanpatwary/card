@@ -30,19 +30,6 @@ const userSchema = new mongoose.Schema({
         }
 
     },
-    work_email: {
-        type: String,
-        trim: true,
-        index: {
-            dropDups: true
-        },
-        validate(value) {
-            if (!val.isEmail(value)) {
-                throw new Error('Email is invalid.')
-            }
-        }
-
-    },
     phone_number:{
         type: String
     },
@@ -111,18 +98,24 @@ userSchema.methods.clearOldTokens = async function(){
 // Add Contact to Contacts list
 userSchema.methods.addContact = async function(new_contact_id){
     const user = this
-    new_contacts = user.contacts.concat(new_contact_id)
-    user.contacts = new_contacts
-    await user.save()
+    if(user.contacts.includes(new_contact_id)===false){
+        console.log('new');
+        new_contacts = user.contacts.concat(new_contact_id)
+        user.contacts = new_contacts
+        await user.save()
+    }
 }
 
 // Remove Contact from Contacts list
 userSchema.methods.removeContact = async function(contact_id){
     const user = this
-    let new_contacts = user.contacts.filter(id => !(id.equals(contact_id)))
-    user.contacts = new_contacts
-    await user.save()
+    if(user.contacts.includes(new_contact_id)===true){
+        let new_contacts = user.contacts.filter(id => !(id.equals(contact_id)))
+        user.contacts = new_contacts
+        await user.save()
+    } 
 }
+
 // Used for Sign In and Sign Up
 // Finds user if user exists
 // If user exists, bcrypt checks if provided user details are correct 
