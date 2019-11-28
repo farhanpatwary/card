@@ -103,6 +103,9 @@ userSchema.methods.addContact = async function(new_contact_id){
         new_contacts = user.contacts.concat(new_contact_id)
         user.contacts = new_contacts
         await user.save()
+        return true
+    } else {
+        return false
     }
 }
 
@@ -113,7 +116,10 @@ userSchema.methods.removeContact = async function(contact_id){
         let new_contacts = user.contacts.filter(id => !(id.equals(contact_id)))
         user.contacts = new_contacts
         await user.save()
-    } 
+        return true
+    } else {
+        return false
+    }
 }
 
 // Used for Sign In and Sign Up
