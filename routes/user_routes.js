@@ -39,8 +39,12 @@ user_router.post('/addcontact', auth, async (req, res) => {
         const contact = await User.find({
             short: req.body.short
         })
-        await user.addContact(contact[0]._id)
-        res.status(200).send(contact)
+        const new_contact = await user.addContact(contact[0]._id)
+        if(new_contact === true){
+            res.status(200).send(contact)
+        } else {
+            res.send(JSON.stringify({ message: 'User already added' }))
+        }
     } catch (e) {
         res.status(500).send(e)
     }
