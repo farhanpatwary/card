@@ -1,5 +1,4 @@
 # Card
-# About this repository
 This is the back end application for Card, a digital business card I have built using the MERN Stack (MongoDB - Express.js - React.js - Node.js).  
 
 If you want to try the deployed application click [Here](http://fast-card.herokuapp.com/).   
