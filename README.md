@@ -5,3 +5,6 @@ If you want to try the deployed application click [Here](http://fast-card.heroku
 **Note that the application is deployed on heroku and may take up to a minute to load since the application closes after a period of inactivity.**   
 
 The backend for the application can be found [Here](https://github.com/farhanpatwary/card).
+
+## Wiki
+This application's wiki can be found [here](https://github.com/farhanpatwary/card/wiki)
