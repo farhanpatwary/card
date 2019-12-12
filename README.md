@@ -6,5 +6,4 @@ If you want to try the deployed application click [Here](http://fast-card.heroku
 
 The backend for the application can be found [Here](https://github.com/farhanpatwary/card).
 
-## Wiki
-This application's wiki can be found [here](https://github.com/farhanpatwary/card/wiki)
+For more details click [here](https://github.com/farhanpatwary/card/wiki).
